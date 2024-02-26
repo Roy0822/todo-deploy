@@ -1,0 +1,124 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@700&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #b6e0ff;
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  width: 40rem;
+  height: 33.5rem;
+  border-radius: 20px;
+  padding: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #00111d;
+  filter: drop-shadow(4px 4px 10px #0000003f);
+}
+
+.title {
+  font-family: "Fira Code", monospace;
+  font-size: 40px;
+  color: #b6e0ff;
+}
+
+.horizon-card {
+  width: 24rem;
+  height: 3.75rem;
+  background-color: #253c4d;
+  display: flex;
+  align-items: center;
+  padding-left: 0.8rem;
+  gap: 0.8rem;
+}
+
+.todo-creator {
+  margin-top: 2rem;
+  border-radius: 10px;
+}
+
+.checkbox {
+  width: 25px;
+  height: 25px;
+  color: #b6e0ff;
+  background: none;
+  border: 1px solid #b6e0ff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.add-button {
+  font-size: 20px;
+}
+
+.input,
+input::placeholder {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  background: none;
+  border: none;
+  outline: none;
+  color: white;
+  width: 80%;
+  cursor: text;
+}
+
+.input::placeholder {
+  color: #b6e0ff52;
+}
+
+.todo-list {
+  color: white;
+
+  display: flex;
+  width: 24rem;
+  margin-top: 1rem;
+  border-radius: 10px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  flex-direction: column;
+  max-height: 15rem;
+}
+
+.todo-list::-webkit-scrollbar {
+  display: none;
+}
+
+.todo {
+  flex-shrink: 0;
+  height: 3.75rem;
+  width: 100%;
+  background-color: #253c4d;
+  border-top: 1px solid #b6e0ff52;
+}
+
+.todo:first-child {
+  border-top: none;
+}
+
+.todo .name {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  color: white;
+}
+
+.finished .checkbox {
+  background-color: #b6e0ff;
+}
+
+.finished .name {
+  text-decoration: line-through;
+  color: #b6e0ff52;
+}
