@@ -1,6 +1,11 @@
 'use client';  //執行過程在client上顯示
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+
+import { createClient } from '@supabase/supabase-js'
+const supabaseUrl = 'https://qukpvxlkhstaagtdpwau.supabase.co'
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY /*環境變數將key擋起來 */
+const supabase = createClient(supabaseUrl, supabaseKey)
 /*
   const [variable, functionName] = useState(5); initial value of variable
     使用 useState 時，每次點擊都會重新渲染。
@@ -18,52 +23,39 @@ import { useState, useRef } from "react";
     裡面用{}包起來，可以用javascript語法
 */
 
-const ExampleTodos = [
-  {
-    id: 1,          //ID is in charge of identifying todo things
-    name: "Calculus HW2",
-    done: false,
-  },
-  {
-    id: 2,
-    name: "Side Project Figma",
-    done: false,
-  },
-  {
-    id: 3,
-    name: "Course Slide",
-    done: false,
-  },
-  {
-    id: 4,
-    name: "Write Blog Post",
-    done: true,
-  },
-  {
-    id: 5,
-    name: "Test",
-    done: true,
-  },
-];
-
 export default function Home() {
-  const [allTodos, setTodos] = useState(ExampleTodos);
+  const [allTodos, setTodos] = useState([]);
   const inputRef = useRef(null);  //initialization
+  useEffect(() => {
+    async function FetchTodos() { //async:等待完成後再執行下一行
+      let { data: todos, error } = await supabase
+      .from('todos')
+        .select('*')  
+      
+      setTodos(todos);
+    }
+    FetchTodos();
+   }, []);
 
   function Todo({ todo }) {
     return (
       <div className={`horizon-card todo ${todo.done ? 'finished' : ''}`}>    
-        <button className="checkbox" onClick={() => {
+        <button className="checkbox" onClick={async () => {
+          const { data, error } = await supabase
+          .from('todos')
+          .update({ done: !todo.done })
+          .eq('id', todo.id)
+          .select()
+          
+
+
           const newTodos = allTodos.map((tempTodo) => {
             if (tempTodo.id === todo.id) {
-              return {
-                ...tempTodo,
-                done: !tempTodo.done,
-              }
+              return data[0];
             }
             return tempTodo;
-          });
-          setTodos(newTodos); //重新渲染
+          }); 
+          setTodos(newTodos);
         }}></button>
         <div className="name">{todo.name}</div>
       </div>
@@ -74,8 +66,17 @@ export default function Home() {
     <div className="card">
       <div className="title">TODO</div>
       <div className="horizon-card todo-creator">
-        <button className="checkbox add-button" onClick={() => {
+        <button className="checkbox add-button" onClick={async () => {
+
           if (inputRef.current.value !== "") {
+            const {data} = await supabase
+            .from('todos')
+            .insert([
+            { done: false ,name: inputRef.current.value},
+          ])
+            .select() //新增後直接讀取值
+          console.log(data)
+          setTodos([data[0], ...allTodos]); //重新渲染
             setTodos([{
             id: allTodos.length + 1,
             name: inputRef.current.value,
